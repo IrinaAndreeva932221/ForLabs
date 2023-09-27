@@ -6,6 +6,11 @@ void Swap(int *x, int *y)
     int tmp=*x; *x=*y; *y=tmp;
 }
 
+void GetArrey(int *arr1, int *arr2, int n)
+{
+    for(int i=0; i<n; i++) arr2[i]=arr1[i];
+}
+
 void BubbleSortUp (int *a, int n, int g)
 {
     for(int k=n-1; k>g; k--)
@@ -48,34 +53,35 @@ void OutputPath(int *path, int n)
     std::cout<<std::endl;
 }
 
-void getNewPath(int *path, int n, int *answ)
+void getNewPath(int *path, int n)
 {
-   int i, j, p=1, l,temp;
-    for (l=1; l<n; l++) p*=l;
-    for (l = 0; l<p-1; l++)
-    {
+   int i, j,temp;
     for(i=n-2; i>0; i--)
     {if (path[i]<path[i+1])
     {
         for(j=n-1; j>i; j--)
         {
             if(path[i]<path[j])
-            {temp=path[i];
-            path[i]=path[j];
-            path[j]=temp;
+            {Swap(path+i, path+j);
             break;}
         }
         break;
     }}
     BubbleSortUp(path, n, i+1);
     OutputPath(path, n);
-    }
 }
 
+int getCostOfPath(int **matr, int n, int *path)
+{
+    int k, cost=0;
+    for(k=0; k<n-1; k++) cost+=matr[path[k]][path[k+1]];
+    std::cout<<"Стоимость: "<<cost<<std::endl;
+    return cost;
+}
 
 int main()
 {
-    int N, startTown, i, j;
+    int N, startTown, i, j, p=1, minCost=0, cost;
     std::cout << "Введите количество городов, которые необходимо посетить :";
     std::cin >> N;
     do {
@@ -88,18 +94,31 @@ int main()
     for (i = 1, j=1; i<N; i++, j++)
     {
         if (i == startTown) j++;
-        path[i] = j;
+       { path[i] = j; final_path[i]=j;}
+
     }
-    int **cost = new int* [N];
+    int **MatCost = new int* [N];
         for (i = 0; i <= N; i++)
-            cost[i] = new int [N];
-    RandInput(cost, N);
+            MatCost[i] = new int [N];
+    RandInput(MatCost, N);
     OutputPath(path, N);
-    std::cout << std::endl;
-    getNewPath(path, N, path);
-    OutputMatr(cost, N);
+    minCost=getCostOfPath(MatCost, N, path);
+    for (i=1; i<N; i++) p*=i;
+    for (i = 0; i<p-1; i++)
+    {getNewPath(path, N);
+     cost=getCostOfPath(MatCost, N, path);
+     if (minCost>cost)
+     {
+        minCost=cost;
+        GetArrey(path, final_path, N);
+     }
+     }
+    OutputMatr(MatCost, N);
+    std::cout<<"Минимальная стоимость: "<<minCost<<std::endl;
+    std::cout<<"Оптимальный путь: ";
+    OutputPath(final_path, N);
     for (i = 0; i <= N; i++)
-        delete [] cost[N];
+        delete [] MatCost[N];
     delete [] path;
     delete [] final_path;
     return 0;
