@@ -1,16 +1,27 @@
 #pragma once
 class Fraction
 {
-public:
-	Fraction Sum(const Fraction a);
-	Fraction Sub(const Fraction a);
-	Fraction Multiplication(const Fraction a);
-	void Print();
-	int numerator;
+    int numerator;
 	int denominator;
-
 public:
-	Fraction();
-	~Fraction();
+	Fraction operator+(const Fraction &other) const;
+	Fraction operator-(const Fraction &other) const;
+	Fraction operator*(const Fraction &other) const;
+	Fraction operator/(const Fraction &other) const;
+	bool operator>(const Fraction &other);
+	bool operator<(const Fraction &other);
+	bool operator==(const Fraction &other);
+	bool operator!=(const Fraction &other);
+	void reduce();
+	void print() const;
+	int getIntegerPart();
+	void printProperForm();
+	int getNumerator() const;
+	int getDenominator() const;
+	void setNumerator(const int value);
+	void setDenominator(const int value);
+	Fraction()=default;
+    Fraction(const int num,const int den);
+    ~Fraction()=default;
 };
 
