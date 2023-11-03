@@ -1,3 +1,9 @@
+#Code::Blocks IDE
+*.layout
+*.depend
+bin/
+obj/
+
 # Prerequisites
 *.d
 
